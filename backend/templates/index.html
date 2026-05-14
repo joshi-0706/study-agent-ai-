@@ -14,19 +14,26 @@
         }
 
         textarea {
-            width: 400px;
-            height: 100px;
+            width: 500px;
+            height: 150px;
+            font-size: 18px;
+            padding: 10px;
         }
 
         button {
-            padding: 10px;
-            margin-top: 10px;
+            padding: 12px 20px;
+            margin-top: 15px;
+            font-size: 18px;
+            cursor: pointer;
         }
 
         #result {
-            margin-top: 20px;
+            margin-top: 30px;
             background: white;
             padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            width: 700px;
         }
 
     </style>
@@ -39,12 +46,12 @@
 
 <h3>Enter your learning goal:</h3>
 
-<textarea id="goal"></textarea>
+<textarea id="goal" placeholder="Example: Learn DSA in 20 days"></textarea>
 
 <br>
 
 <button onclick="generatePlan()">
-Generate Study Plan
+    Generate Study Plan
 </button>
 
 <div id="result"></div>
@@ -53,31 +60,45 @@ Generate Study Plan
 
 async function generatePlan() {
 
-    let goal =
+    const goal =
         document.getElementById("goal").value;
 
-    let response = await fetch(
-        " https://study-agent-ai.onrender.com/generate-plan",
-        {
-            method: "POST",
+    document.getElementById("result").innerHTML =
+        "<h2>Generating Study Plan...</h2>";
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+    try {
 
-            body: JSON.stringify({
-                goal: goal
-            })
-        }
-    );
+        const response = await fetch(
+            "/generate-plan",
+            {
+                method: "POST",
 
-    let data = await response.json();
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-    document.getElementById("result")
-        .innerHTML =
-        "<h2>Study Plan:</h2><p>" +
-        data.study_plan +
-        "</p>";
+                body: JSON.stringify({
+                    goal: goal
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        document.getElementById("result").innerHTML =
+            "<h2>📚 Study Plan:</h2><p>" +
+            data.plan +
+            "</p>";
+
+    }
+
+    catch(error) {
+
+        document.getElementById("result").innerHTML =
+            "<h2>❌ Error generating study plan</h2>";
+
+        console.log(error);
+    }
 }
 
 </script>

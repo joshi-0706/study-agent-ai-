@@ -1,32 +1,25 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from openai import OpenAI
-
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# OpenAI API Key
 client = OpenAI(
-    api_key="YOUR_OPENAI_API_KEY"
+    api_key=os.getenv("OPENAI_API_KEY")
 )
 
-# MySQL Connection
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-#db = mysql.connector.connect(
- #   host="localhost",
-  #  user="root",
-   # password="Joshi@123",
-    #database="smartstudy"
-#)
 
-#cursor = db.cursor()
-
-@app.route('/generate-plan', methods=['POST'])
+@app.route("/generate-plan", methods=["POST"])
 def generate_plan():
 
     data = request.json
-    goal = data['goal']
+    goal = data["goal"]
 
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -44,23 +37,10 @@ def generate_plan():
 
     plan = response.choices[0].message.content
 
-    # Save to MySQL
-    sql = """
-    INSERT INTO tasks (goal, study_plan)
-    VALUES (%s, %s)
-    """
-
-    values = (goal, plan)
-
-    cursor.execute(sql, values)
-    db.commit()
-
     return jsonify({
-        "study_plan": plan
+        "plan": plan
     })
-@app.route("/")
-def home():
-    return render_template("index.html")
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     app.run(debug=True)
-    
