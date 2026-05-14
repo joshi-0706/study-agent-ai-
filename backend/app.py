@@ -20,7 +20,7 @@ client = OpenAI(
     #database="smartstudy"
 #)
 
-cursor = db.cursor()
+#cursor = db.cursor()
 
 @app.route('/generate-plan', methods=['POST'])
 def generate_plan():
