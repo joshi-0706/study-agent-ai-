@@ -46,7 +46,10 @@
 
 <h3>Enter your learning goal:</h3>
 
-<textarea id="goal" placeholder="Example: Learn DSA in 20 days"></textarea>
+<textarea
+    id="goal"
+    placeholder="Example: Learn DSA in 20 days">
+</textarea>
 
 <br>
 
@@ -85,10 +88,22 @@ async function generatePlan() {
 
         const data = await response.json();
 
-        document.getElementById("result").innerHTML =
-            "<h2>📚 Study Plan:</h2><p>" +
-            data.plan +
-            "</p>";
+        if (data.plan) {
+
+            document.getElementById("result").innerHTML =
+                "<h2>📚 Study Plan:</h2><p>" +
+                data.plan +
+                "</p>";
+
+        }
+
+        else {
+
+            document.getElementById("result").innerHTML =
+                "<h2>❌ Error:</h2><p>" +
+                data.error +
+                "</p>";
+        }
 
     }
 
