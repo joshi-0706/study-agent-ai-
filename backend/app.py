@@ -58,7 +58,9 @@ def generate_plan():
     return jsonify({
         "study_plan": plan
     })
-
+@app.route("/")
+def home():
+    return "Study Agent AI is Running Successfully 🚀"
 if __name__ == '__main__':
     app.run(debug=True)
     
