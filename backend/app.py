@@ -6,23 +6,23 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Gemini API Key
+# Configure Gemini API
 genai.configure(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
 # Gemini Model
 model = genai.GenerativeModel(
-    "gemini-1.5-flash-latest"
+    "gemini-2.0-flash"
 )
 
-# Home Page
+# Home Route
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# Generate Study Plan API
+# Generate Study Plan Route
 @app.route("/generate-plan", methods=["POST"])
 def generate_plan():
 
@@ -42,20 +42,18 @@ def generate_plan():
 
         {goal}
 
-        Give:
-        - Daily schedule
-        - Topics to learn
-        - Practice tasks
-        - Revision strategy
-        - Tips
+        Include:
+        - Day wise schedule
+        - Topics
+        - Practice problems
+        - Revision plan
+        - Tips for consistency
         """
 
         response = model.generate_content(prompt)
 
-        plan = response.text
-
         return jsonify({
-            "plan": plan
+            "plan": response.text
         })
 
     except Exception as e:
