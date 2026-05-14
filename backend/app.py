@@ -1,20 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-import google.generativeai as genai
-import os
 
 app = Flask(__name__)
 CORS(app)
-
-# Configure Gemini API
-genai.configure(
-    api_key=os.getenv("GOOGLE_API_KEY")
-)
-
-# Gemini Model
-model = genai.GenerativeModel(
-    "gemini-2.0-flash"
-)
 
 # Home Route
 @app.route("/")
@@ -37,23 +25,76 @@ def generate_plan():
                 "error": "Goal is required"
             }), 400
 
-        prompt = f"""
-        Create a detailed and structured study plan for:
+        # Sample AI Study Plan
+        sample_plan = f"""
+📚 STUDY PLAN FOR: {goal}
 
-        {goal}
+━━━━━━━━━━━━━━━━━━━━━━
 
-        Include:
-        - Day wise schedule
-        - Topics
-        - Practice problems
-        - Revision plan
-        - Tips for consistency
-        """
+📅 Day 1-2
+• Learn Arrays
+• Time Complexity Basics
+• Solve 5 Array Problems
 
-        response = model.generate_content(prompt)
+📅 Day 3-4
+• Learn Strings
+• String Manipulation
+• Practice Pattern Problems
+
+📅 Day 5-6
+• Linked Lists
+• Insertion & Deletion
+• Reverse Linked List Problems
+
+📅 Day 7-8
+• Stacks and Queues
+• Implement Stack using Array
+• Solve Queue Problems
+
+📅 Day 9-10
+• Recursion Basics
+• Recursive Problem Solving
+
+📅 Day 11-13
+• Trees and Binary Trees
+• Traversals
+• Binary Search Tree Basics
+
+📅 Day 14-15
+• Graph Basics
+• BFS and DFS
+
+📅 Day 16-17
+• Dynamic Programming
+• Fibonacci
+• Knapsack Problems
+
+📅 Day 18
+• Revision Day
+• Revisit Weak Topics
+
+📅 Day 19
+• Mock Coding Interview
+• Solve Timed Problems
+
+📅 Day 20
+• Final Revision
+• HR + Technical Interview Prep
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+✅ DAILY TIPS
+• Practice coding every day
+• Revise notes before sleeping
+• Focus on problem-solving
+• Spend at least 2 hours daily
+• Maintain consistency
+
+🚀 ALL THE BEST!
+"""
 
         return jsonify({
-            "plan": response.text
+            "plan": sample_plan
         })
 
     except Exception as e:
