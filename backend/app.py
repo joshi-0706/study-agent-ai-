@@ -12,12 +12,13 @@ client = OpenAI(
 )
 
 # MySQL Connection
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Joshi@123",
-    database="smartstudy"
-)
+
+#db = mysql.connector.connect(
+ #   host="localhost",
+  #  user="root",
+   # password="Joshi@123",
+    #database="smartstudy"
+#)
 
 cursor = db.cursor()
 
