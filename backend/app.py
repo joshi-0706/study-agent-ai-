@@ -18,28 +18,36 @@ def home():
 @app.route("/generate-plan", methods=["POST"])
 def generate_plan():
 
-    data = request.json
-    goal = data["goal"]
+    try:
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a study planner AI."
-            },
-            {
-                "role": "user",
-                "content": f"Create a study plan for: {goal}"
-            }
-        ]
-    )
+        data = request.json
+        goal = data["goal"]
 
-    plan = response.choices[0].message.content
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a study planner AI."
+                },
+                {
+                    "role": "user",
+                    "content": f"Create a detailed study plan for: {goal}"
+                }
+            ]
+        )
 
-    return jsonify({
-        "plan": plan
-    })
+        plan = response.choices[0].message.content
+
+        return jsonify({
+            "plan": plan
+        })
+
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+        })
 
 
 if __name__ == "__main__":
